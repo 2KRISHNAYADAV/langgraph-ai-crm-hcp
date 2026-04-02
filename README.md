@@ -5,11 +5,31 @@ A next-generation AI-first CRM system where LLM-powered agents replace tradition
 
 Welcome to the **AI-First CRM Prototype**, an advanced Medical CRM system where all data entry is strictly automated and curated by an intelligent LangGraph AI Assistant. Built for Healthcare Professional (HCP) interactions, this system eliminates manual typing, leveraging natural language reasoning to perfectly extract, populate, and save interactions to the database flawlessly.
 
+- ❌ No manual typing
+- ✅ Fully conversational
+- 🤖 Powered by LangGraph + Groq LLM
+
 ---
 
 ## 🏗️ Architecture & System Flow
 
-The architecture strictly follows a decoupled modern structure with specific roles per tier. Data moves organically via agent intelligence: **User → React Frontend → FastAPI Router → LangGraph Agent → Groq LLM (Llama 3) → Tools Array → Database.**
+## 🔄 Data Flow
+
+The system operates through an AI-first pipeline:
+
+User  
+⬇️  
+React Frontend (UI + Redux State)  
+⬇️  
+FastAPI Backend (API Layer)  
+⬇️  
+LangGraph Agent (Decision Engine)  
+⬇️  
+Groq LLM - gemma2-9b-it (Reasoning & Extraction)  
+⬇️  
+AI Tools (Log, Edit, Validate, Submit, Clear)  
+⬇️  
+Database (SQLite / PostgreSQL)
 
 ```mermaid
 graph TD
@@ -90,17 +110,39 @@ hcp-crm/
 
 The CRM safely persists structured interactions using **SQLAlchemy** ORM.
 
-**Table Models**: `Interaction`
-* `id` *(Integer, Primary Key)*
-* `hcp_name` *(String, Indexed)*: Extracted doctor/clinician name.
-* `date` *(String)*: Recorded interaction date.
-* `product` *(String)*: Mentioned pharmaceutical or medical product.
-* `sentiment` *(String)*: Qualitative tone of the meeting.
-* `follow_up` *(String)*: Required scheduling or action tasks.
-* `notes` *(Text)*: Elaborated reasoning and observations.
+| Field     | Type    | Description       |
+| --------- | ------- | ----------------- |
+| id        | Integer | Primary Key       |
+| hcp_name  | String  | Doctor name       |
+| date      | String  | Interaction date  |
+| product   | String  | Product discussed |
+| sentiment | String  | Meeting tone      |
+| follow_up | String  | Next action       |
+| notes     | Text    | Detailed notes    |
 
 > **Note**: While structurally engineered to seamlessly integrate with PostgreSQL environments via `DATABASE_URL` environment variables, the system falls back to standalone SQLite (`sqlite:///./crm.db`) to enable friction-free local iteration out of the box.
+---
+##  AI Tools (Core Functionality)
 
+The agent is powered by 5 tools:
+
+### 1. Log Interaction Tool
+- Extracts structured data from natural language  
+- Fields: `hcp_name`, `date`, `product`, `sentiment`, `follow_up`, `notes`  
+
+### 2. Edit Interaction Tool
+- Updates specific fields via chat  
+- Example: `"Change follow-up to Friday"`  
+
+### 3. Validation Tool
+- Checks for missing required fields  
+- Prevents incomplete submissions  
+
+### 4. Submit Tool
+- Validates and saves data to database  
+
+### 5. Clear Form Tool
+- Resets all fields instantly  
 ---
 
 ## 🚀 Getting Started
@@ -150,3 +192,16 @@ The interaction pattern natively forbids manual typing in the CRM form:
 3. **Sequential Pipeline**: The agent natively structures multiple steps. It might choose to log the interaction to build state, then gracefully call `submit_form` automatically.
 4. **Client Handoff**: The API returns an array of specific functional actions.
 5. **Redux Render**: React progressively processes the operations, dispatching updates to Redux, beautifully rendering `Framer Motion` stagger animations as the Left Panel magically auto-fills itself!
+
+---
+## 📸 Screenshots
+<img width="1106" height="895" alt="AI Chat Interaction" src="https://github.com/user-attachments/assets/bfbbe3bd-f84d-4280-bf1a-cd30b2de55ce" />
+
+---
+
+<img width="1915" height="962" alt="Full CRM Interface" src="https://github.com/user-attachments/assets/54e64d76-359a-4c00-8d8a-aa01cbc3c46c" />
+
+---
+
+<img width="1890" height="406" alt="Interaction Saved" src="https://github.com/user-attachments/assets/2a01cbb3-b2e7-4404-991f-5b31ce57abb2" />
+
