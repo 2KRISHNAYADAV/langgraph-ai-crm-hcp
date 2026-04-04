@@ -70,6 +70,10 @@ graph TD
 
 ## 📂 Project Structure
 
+## 📁 Access Project Files
+
+👉 [Click here to view the complete project folder](https://drive.google.com/drive/folders/18Fa2dkoU2RZa8BZ0n_JC-ebjD1CDzy7y?usp=drive_link)
+
 This project enforces strict modular boundaries:
 
 ```text
